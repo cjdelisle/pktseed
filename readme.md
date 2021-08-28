@@ -4,14 +4,18 @@ This is the seed algorithm used in PktWallet.
 ## Why another seed algotithm?!
 1. **Versions**: BIP-39 has no version so it cannot be updated, ever
 2. **Encryption**: Seeds can optionally be encrypted using a passphrase stretched with Argon2 for
-significant additional safety.
+significant additional safety. BIP-39 also allows a passphrase, but the passphrase is *hashed* with the
+seed rather than being used to encrypt it, so a BIP-39 passphrase can never be changed but a PKT passphrase
+can be changed any time and will simply result in a new word-based representation of the seed.
 3. **Checksums**: A single wrong word is quickly detected without a confusing decryption failure.
 The birthday also serves as an additional few bits of checksum because seeds which declare a birthday
 from before this seed algorithm was first released, or one in the future, are rejected.
 3. **Birthdays**: Seeds contain a datestamp with the day when the seed (wallet) was created,
 so wallet implementations can re-sync from seed without scanning the entire history of the blockchain.
-4. **Brief**: Only 15 words long, as brief as possible with 136 bit security.
-
+4. **Convention Over Configuration**: All PKT seed phrases are exactly 15 words long and provide 136 bits
+of security, a security level which is recognized as adaquate in the cryptography community.
+BIP-39 defines 12, 15, 18, 21 and 24 word seeds, punting the question of appropriate security level
+to the end users, many of whom would select 200 word seeds if they were so offered.
 
 ## How do I?
 

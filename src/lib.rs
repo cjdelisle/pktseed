@@ -10,6 +10,8 @@ mod capi;
 /// Representation of a wallet seed which can be output as words.
 ///
 /// Seed layout:
+/// 
+/// ```
 ///     0               1               2               3
 ///     0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
 ///    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -25,15 +27,15 @@ mod capi;
 ///    +               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /// 20 |               |
 ///    +-+-+-+-+-+-+-+-+
-/// 
-/// U: unused: Cannot be used because there are only 165 bits in 15 11 bit words. When decoding
+/// ```
+/// * U: unused: Cannot be used because there are only 165 bits in 15 11 bit words. When decoding
 ///            the bignum is initialized to 1, which causes unused to be set to 1 so EXPECT_UNUSED
 ///            is 1, but after decoding then unused is cleared to zero.
-/// Ver: 0
-/// E: 1 if there is a passphrase encrypting the seed, 0 otherwise
-/// Checksum: first byte of blake2b of structure with Checksum and Unused cleared
-/// Birthday (encrypted): when the wallet was created, unix time divided by 60*60*24, big endian
-/// Seed (encrypted): 17 byte seed content
+/// * Ver: 0
+/// * E: 1 if there is a passphrase encrypting the seed, 0 otherwise
+/// * Checksum: first byte of blake2b of structure with Checksum and Unused cleared
+/// * Birthday (encrypted): when the wallet was created, unix time divided by 60*60*24, big endian
+/// * Seed (encrypted): 17 byte seed content
 #[derive(Clone)]
 pub struct SeedEnc {
     bytes: Zeroizing<[u8; Self::BYTES_LEN]>,

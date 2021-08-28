@@ -1,6 +1,6 @@
 [package]
 name = "pktseed"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 authors = ["Caleb James DeLisle <cjd@cjdns.fr>"]
 description = "Wallet seed support for PktWallet style seeds"

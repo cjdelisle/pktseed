@@ -1,0 +1,37 @@
+[package]
+name = "pktseed"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[build-dependencies]
+walkdir = "2.3"
+cbindgen = { version = "0.20", optional = true }
+
+[dev-dependencies]
+
+[dependencies]
+anyhow = "1"
+num-bigint = "0.4"
+num-traits = "0.2"
+blake2b_simd = "0.5"
+rust-argon2 = "0.8"
+zeroize = "1.4"
+hex = "0.4"
+
+[features]
+default = ["lang-english"]
+generate-capi = ["cbindgen"]
+lang-chinese-simplified = []
+lang-chinese-traditional = []
+lang-czech = []
+lang-english = []
+lang-french = []
+lang-italian = []
+lang-japanese = []
+lang-korean = []
+lang-portuguese = []
+lang-spanish = []

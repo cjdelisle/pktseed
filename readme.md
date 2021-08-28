@@ -2,7 +2,7 @@
 This is the seed algorithm used in PktWallet.
 
 ## Why another seed algotithm?!
-1. **Versions**: BIP-32 has no version so it cannot be updated, ever
+1. **Versions**: BIP-39 has no version so it cannot be updated, ever
 2. **Encryption**: Seeds can optionally be encrypted using a passphrase stretched with Argon2 for
 significant additional safety.
 3. **Checksums**: A single wrong word is quickly detected without a confusing decryption failure.

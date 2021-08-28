@@ -25,11 +25,3 @@ pub fn language(lang: &str) -> Option<&'static Language> {
 }
 
 include!(concat!(env!("OUT_DIR"), "/languages.incl.rs"));
-
-// pub fn word_for_num(lang: &str, wordnum: u16) -> Option<&'static str> {
-// 	include!(concat!(env!("OUT_DIR"), "/word_for_num.incl.rs"))
-// }
-
-// pub fn num_for_word(lang: &str, word: &str) -> Option<u16> {
-// 	include!(concat!(env!("OUT_DIR"), "/num_for_word.incl.rs"))
-// }

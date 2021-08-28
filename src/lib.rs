@@ -70,7 +70,19 @@ fn nums_for_words(w: &str) -> Result<[u16; SeedEnc::WORD_COUNT]> {
     );
 }
 
+
+// I can't believe this is not part of std. No, I'm not pulling in a dep for this.
+fn date_from_ts(ts: u64) -> std::time::SystemTime {
+    use std::ops::Add;
+    std::time::SystemTime::UNIX_EPOCH.add(std::time::Duration::from_secs(ts))
+}
+
 impl SeedEnc {
+    /// July 7th, 2020, the time when this seed algorithm was first released.
+    /// Seeds claiming a birthday older than this should be considered to be almost
+    /// certainly invalid - i.e. the password decryption failed.
+    const BEGINNING_OF_TIME: u64 = 1586276691;
+
     /// Output the words which represent this seed
     pub fn words(&self, lang_name: &str) -> Result<String> {
         if let Some(lang) = words::language(lang_name) {
@@ -102,12 +114,30 @@ impl SeedEnc {
     }
     /// Decrypt the seed into a Seed form. If is_encrypted() is true then
     /// a passphrase must be specified.
-    pub fn decrypt(&self, passphrase: Option<&[u8]>) -> Result<Seed> {
+    /// If force is true then the seed will be decrypted even if the birthday is
+    /// in the future or from before July 7th 2020, when this algorithm was first
+    /// released.
+    pub fn decrypt(&self, passphrase: Option<&[u8]>, force: bool) -> Result<Seed> {
         let mut copy = self.clone();
         if passphrase.is_some() && self.is_encrypted() {
             cipher(&mut copy.bytes[2..], passphrase);
         } else if self.is_encrypted() {
             bail!("This seed is encrypted and requires a passphrase to decrypt");
+        }
+        let out = Seed::new_raw(&copy.bytes[2..]);
+        if !force {
+            if out.get_bday() < Self::BEGINNING_OF_TIME {
+                bail!(concat!(
+                    "This seed has a declared birthday of {:?} which is older than the ",
+                    "time when this seed algorithm was first created, the password or ",
+                    "seed words are probably incorrect, to override this message set force ",
+                    "to true."), date_from_ts(out.get_bday()));
+            } else if out.get_bday() > now_sec() {
+                bail!(concat!(
+                    "This seed has a declated birthday of {:?} which is in the future ",
+                    "the seed or password protecting it are probably incorrect. To override ",
+                    "this message set force to true."), date_from_ts(out.get_bday()));
+            }
         }
         Ok(Seed::new_raw(&copy.bytes[2..]))
     }
@@ -327,7 +357,7 @@ mod tests {
     #[test]
     fn test_vec() -> Result<()> {
         let se = SeedEnc::from_words(WORDS)?;
-        let seed = se.decrypt(Some(SEED_PASS))?;
+        let seed = se.decrypt(Some(SEED_PASS), false)?;
         let seed_hex = hex::encode(&seed.bytes[..]);
         assert_eq!(seed.get_bday(), BDAY);
         assert_eq!(seed_hex, SECRET_HEX);

@@ -104,13 +104,13 @@ pub unsafe extern "C" fn pktseed_from_words(
         if passphrase.is_none() {
             return PKTSEED_RET_ENCRYPTED_NO_PASS;
         }
-        if let Ok(seed) = se.decrypt(passphrase) {
+        if let Ok(seed) = se.decrypt(passphrase, false) {
             seed
         } else {
             return PKTSEED_RET_FAILED_DECRYPT;
         }
     } else {
-        if let Ok(seed) = se.decrypt(None) {
+        if let Ok(seed) = se.decrypt(None, false) {
             seed
         } else {
             return PKTSEED_RET_INTERNAL

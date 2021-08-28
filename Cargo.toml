@@ -6,7 +6,7 @@ authors = ["Caleb James DeLisle <cjd@cjdns.fr>"]
 description = "Wallet seed support for PktWallet style seeds"
 repository = "https://github.com/cjdelisle/pktseed"
 license = "MIT OR Apache-2.0"
-keywords = ["password", "wallet", "seed", "pkt", "bitcoin", "argon2"]
+keywords = ["password", "wallet", "seed", "pkt", "bitcoin"]
 build = "build.rs"
 
 [lib]
